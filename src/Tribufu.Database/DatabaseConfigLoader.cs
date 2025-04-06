@@ -6,17 +6,24 @@ using System;
 
 namespace Tribufu.Database
 {
+    /// <summary>
+    /// Provides logic to load database configuration from an <see cref="IConfiguration"/> source.
+    /// </summary>
     public static class DatabaseConfigLoader
     {
+        /// <summary>
+        /// Loads the <see cref="DatabaseConfig"/> from the "database" section or from root-level keys prefixed with "database_".
+        /// </summary>
+        /// <param name="configuration">The configuration source.</param>
+        /// <returns>The populated <see cref="DatabaseConfig"/> instance.</returns>
         public static DatabaseConfig LoadFrom(IConfiguration configuration)
         {
             var section = configuration.GetSection("database");
-            if (!section.Exists())
-            {
-                throw new InvalidOperationException("Missing 'database' section in configuration.");
-            }
+            var useRootFallback = !section.Exists();
 
-            var driverString = section["driver"] ?? throw new Exception("Missing database driver");
+            string GetConfig(string key) => useRootFallback ? configuration[$"database_{key}"] : section[key];
+
+            var driverString = GetConfig("driver") ?? throw new Exception("Missing database driver");
             if (!Enum.TryParse<DatabaseDriver>(driverString, true, out var driver))
             {
                 throw new Exception($"Unsupported database driver: {driverString}");
@@ -25,14 +32,13 @@ namespace Tribufu.Database
             return new DatabaseConfig
             {
                 Driver = driver,
-                Version = section["version"],
-                Host = section["host"],
-                Port = section["port"],
-                User = section["user"],
-                Password = section["password"],
-                Schema = section["schema"]
+                Version = GetConfig("version"),
+                Host = GetConfig("host"),
+                Port = GetConfig("port"),
+                User = GetConfig("user"),
+                Password = GetConfig("password"),
+                Schema = GetConfig("schema")
             };
         }
     }
-
 }
