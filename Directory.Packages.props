@@ -3,7 +3,13 @@
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
     <ItemGroup>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageVersion Include="MongoDB.EntityFrameworkCore" Version="8.1.0" />
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
         <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
         <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>

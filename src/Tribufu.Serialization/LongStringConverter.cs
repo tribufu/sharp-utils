@@ -2,21 +2,20 @@
 // SPDX-License-Identifier: MIT
 
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Tribufu.Serialization
 {
     public class LongStringConverter : JsonConverter<ulong>
     {
-        public override ulong Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override ulong ReadJson(JsonReader reader, Type objectType, ulong existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return Convert.ToUInt64(reader.GetString());
+            return ulong.Parse(reader.ToString());
         }
 
-        public override void Write(Utf8JsonWriter writer, ulong value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, ulong value, JsonSerializer serializer)
         {
-            writer.WriteStringValue(value.ToString());
+            writer.WriteValue(value.ToString());
         }
     }
 }

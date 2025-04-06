@@ -2,21 +2,20 @@
 // SPDX-License-Identifier: MIT
 
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Tribufu.Serialization
 {
     public class DecimalStringConverter : JsonConverter<decimal>
     {
-        public override decimal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override decimal ReadJson(JsonReader reader, Type objectType, decimal existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return Convert.ToUInt64(reader.GetString());
+            return decimal.Parse(reader.ToString());
         }
 
-        public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, decimal value, JsonSerializer serializer)
         {
-            writer.WriteStringValue(value.ToString());
+            writer.WriteValue(value.ToString());
         }
     }
 }
