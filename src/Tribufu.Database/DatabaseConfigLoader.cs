@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace Tribufu.Database
 {
