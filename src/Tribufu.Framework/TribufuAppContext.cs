@@ -24,7 +24,8 @@ namespace Tribufu.Framework
             return true;
 #else
             // Extra heuristics if needed (expand here if running outside DEBUG context)
-            return Debugger.IsAttached || Environment.GetEnvironmentVariable("DEBUG") == "true";
+            //return Debugger.IsAttached || Environment.GetEnvironmentVariable("DEBUG") == "true";
+            return false;
 #endif
         }
 
