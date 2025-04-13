@@ -22,21 +22,29 @@ namespace Tribufu.Database
                     case DatabaseDriver.MySql:
                         var mysqlConnection = $"Server={config.Host};Port={config.Port};Uid={config.User};Pwd={config.Password};Database={config.Schema};ConvertZeroDateTime=True;";
                         options.UseMySql(mysqlConnection, ServerVersion.Parse(config.Version ?? "8.0"), mySqlOptions => { });
-
                         break;
                     case DatabaseDriver.Postgres:
                         var pgsqlConnection = $"Host={config.Host};Port={config.Port};Database={config.Schema};Username={config.User};Password={config.Password};";
                         options.UseNpgsql(pgsqlConnection, npgsqlOptions => { });
-
+                        break;
+                    case DatabaseDriver.SqlServer:
+                        var sqlServerConnection = $"Server={config.Host},{config.Port};Database={config.Schema};User Id={config.User};Password={config.Password};";
+                        options.UseSqlServer(sqlServerConnection, sqlOptions => { });
+                        break;
+                    case DatabaseDriver.Oracle:
+                        var oracleConnection = $"User Id={config.User};Password={config.Password};Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={config.Host})(PORT={config.Port})))(CONNECT_DATA=(SERVICE_NAME={config.Schema})));";
+                        options.UseOracle(oracleConnection, oracleOptions => { });
+                        break;
+                    case DatabaseDriver.Firebird:
+                        var firebirdConnection = $"User={config.User};Password={config.Password};Database={config.Host}:{config.Port}/{config.Schema};Dialect=3;";
+                        options.UseFirebird(firebirdConnection, firebirdOptions => { });
                         break;
                     case DatabaseDriver.Sqlite:
                         var savedDirectory = TribufuAppContext.GetSavedDirectory();
                         if (!Directory.Exists(savedDirectory)) Directory.CreateDirectory(savedDirectory);
-
                         var sqliteDatabaseFile = string.IsNullOrEmpty(config.Schema) ? "default.db" : $"{config.Schema}.db";
                         var sqliteDatabasePath = Path.Combine(savedDirectory, sqliteDatabaseFile);
                         options.UseSqlite($"Data Source={sqliteDatabasePath}", sqliteOptions => { });
-
                         break;
                     case DatabaseDriver.MongoDb:
                         var mongoUriBuilder = new MongoUrlBuilder
@@ -46,11 +54,9 @@ namespace Tribufu.Database
                             Password = config.Password,
                             DatabaseName = config.Schema
                         };
-
                         var mongoClient = new MongoClient(mongoUriBuilder.ToMongoUrl());
                         var mongoDatabase = mongoClient.GetDatabase(config.Schema ?? "default");
                         options.UseMongoDB(mongoDatabase.Client, mongoDatabase.DatabaseNamespace.DatabaseName);
-
                         break;
                     default:
                         throw new NotSupportedException($"Unsupported database driver: {config.Driver}");

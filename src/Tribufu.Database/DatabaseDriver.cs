@@ -9,8 +9,14 @@ namespace Tribufu.Database
 
         Postgres,
 
+        SqlServer,
+
+        Oracle,
+
+        Firebird,
+
         Sqlite,
 
-        MongoDb
+        MongoDb,
     }
 }
