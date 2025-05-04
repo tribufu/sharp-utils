@@ -7,11 +7,11 @@ using Tribufu.Framework.Interfaces;
 
 namespace Tribufu.Framework.Services
 {
-    public class Service<T> : IService<T> where T : class
+    public class Service<T, K> : IService<T, K> where T : class
     {
-        protected readonly IRepository<T> _repository;
+        protected readonly IRepository<T, K> _repository;
 
-        public Service(IRepository<T> repository)
+        public Service(IRepository<T, K> repository)
         {
             _repository = repository;
         }
@@ -36,14 +36,14 @@ namespace Tribufu.Framework.Services
             return await _repository.GetAllAsync();
         }
 
-        public virtual T GetById(ulong id)
+        public virtual T GetOne(K id)
         {
-            return _repository.GetById(id);
+            return _repository.GetOne(id);
         }
 
-        public virtual async Task<T> GetByIdAsync(ulong id)
+        public virtual async Task<T> GetOneAsync(K id)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetOneAsync(id);
         }
 
         public virtual T Create(T entity)
@@ -66,12 +66,12 @@ namespace Tribufu.Framework.Services
             return await _repository.UpdateAsync(entity);
         }
 
-        public virtual void Delete(ulong id)
+        public virtual void Delete(K id)
         {
             _repository.Delete(id);
         }
 
-        public virtual async Task DeleteAsync(ulong id)
+        public virtual async Task DeleteAsync(K id)
         {
             await _repository.DeleteAsync(id);
         }

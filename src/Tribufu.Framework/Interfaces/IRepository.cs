@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tribufu.Framework.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T, K> where T : class
     {
         public IList<T> GetAll();
 
@@ -16,9 +16,9 @@ namespace Tribufu.Framework.Interfaces
 
         public Task<IList<T>> GetPageAsync(uint page, uint limit = DatabaseLimits.PAGINATION);
 
-        public T GetById(ulong id);
+        public T GetOne(K key);
 
-        public Task<T> GetByIdAsync(ulong id);
+        public Task<T> GetOneAsync(K key);
 
         public T Create(T entity);
 
@@ -28,9 +28,9 @@ namespace Tribufu.Framework.Interfaces
 
         public Task<T> UpdateAsync(T entity);
 
-        public void Delete(ulong id);
+        public void Delete(K id);
 
-        public Task DeleteAsync(ulong id);
+        public Task DeleteAsync(K id);
 
         public void Delete(T entity);
 

@@ -6,7 +6,7 @@ using Tribufu.Framework.Interfaces;
 
 namespace Tribufu.Database.Repositories
 {
-    public class Repository<C, T> : IRepository<T> where C : DbContext where T : class
+    public class Repository<C, T, K> : IRepository<T, K> where C : DbContext where T : class
     {
         protected readonly C _context;
 
@@ -20,7 +20,7 @@ namespace Tribufu.Database.Repositories
 
         public virtual IList<T> GetAll()
         {
-            return _dbSet.ToList();
+            return [.. _dbSet];
         }
 
         public virtual async Task<IList<T>> GetAllAsync()
@@ -30,7 +30,7 @@ namespace Tribufu.Database.Repositories
 
         public virtual IList<T> GetPage(uint page, uint limit)
         {
-            return _dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToList();
+            return [.. _dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit)];
         }
 
         public virtual async Task<IList<T>> GetPageAsync(uint page, uint limit)
@@ -38,100 +38,68 @@ namespace Tribufu.Database.Repositories
             return await _dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToListAsync();
         }
 
-        public virtual T GetById(ulong id)
+        public virtual T GetOne(K key)
         {
-            return _dbSet.Find(id);
+            return _dbSet.Find(key);
         }
 
-        public virtual async Task<T> GetByIdAsync(ulong id)
+        public virtual async Task<T> GetOneAsync(K key)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(key);
         }
 
         public virtual T Create(T entity)
         {
-            try
-            {
-                _dbSet.Add(entity);
+            _dbSet.Add(entity);
 
-                var result = _context.SaveChanges();
-                if (result == 0)
-                {
-                    return null;
-                }
-
-                return entity;
-            }
-            catch (Exception)
+            var result = _context.SaveChanges();
+            if (result == 0)
             {
+                return null;
             }
 
-            return null;
+            return entity;
         }
 
         public virtual async Task<T> CreateAsync(T entity)
         {
-            try
-            {
-                await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
 
-                var result = await _context.SaveChangesAsync();
-                if (result == 0)
-                {
-                    return null;
-                }
-
-                return entity;
-            }
-            catch (Exception)
+            var result = await _context.SaveChangesAsync();
+            if (result == 0)
             {
+                return null;
             }
 
-            return null;
+            return entity;
         }
 
         public virtual T Update(T entity)
         {
-            try
-            {
-                _dbSet.Update(entity);
-                _context.SaveChanges();
-                return entity;
-            }
-            catch (Exception)
-            {
-            }
-
-            return null;
+            _dbSet.Update(entity);
+            _context.SaveChanges();
+            return entity;
         }
 
         public virtual async Task<T> UpdateAsync(T entity)
         {
-            try
-            {
-                _dbSet.Update(entity);
-                await _context.SaveChangesAsync();
-                return entity;
-            }
-            catch (Exception)
-            {
-            }
-
-            return null;
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public virtual void Delete(ulong id)
+        public virtual void Delete(K key)
         {
-            var entity = GetById(id);
+            var entity = GetOne(key);
             if (entity != null)
             {
                 Delete(entity);
             }
         }
 
-        public virtual async Task DeleteAsync(ulong id)
+        public virtual async Task DeleteAsync(K key)
         {
-            var entity = await GetByIdAsync(id);
+            var entity = await GetOneAsync(key);
             if (entity != null)
             {
                 await DeleteAsync(entity);
