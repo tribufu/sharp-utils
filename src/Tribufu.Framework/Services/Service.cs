@@ -28,12 +28,12 @@ namespace Tribufu.Framework.Services
 
         public virtual IList<T> GetPage(uint page, uint limit)
         {
-            return _repository.GetAll();
+            return _repository.GetPage(page, limit);
         }
 
         public virtual async Task<IList<T>> GetPageAsync(uint page, uint limit)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetPageAsync(page, limit);
         }
 
         public virtual T GetOne(K id)
