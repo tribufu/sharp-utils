@@ -8,7 +8,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>annotations</Nullable>
+        <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
         <TargetFrameworks>net8.0</TargetFrameworks>
     </PropertyGroup>
