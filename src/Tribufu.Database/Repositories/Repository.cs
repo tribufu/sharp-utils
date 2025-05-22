@@ -18,39 +18,39 @@ namespace Tribufu.Database.Repositories
             this.dbSet = context.Set<T>();
         }
 
-        public IList<T> GetAll()
+        public virtual IList<T> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public async Task<IList<T>> GetAllAsync()
+        public virtual async Task<IList<T>> GetAllAsync()
         {
             return await dbSet.ToListAsync();
         }
 
-        public IList<T> GetPage(uint page, uint limit)
+        public virtual IList<T> GetPage(uint page, uint limit)
         {
             return dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToList();
         }
 
-        public async Task<IList<T>> GetPageAsync(uint page, uint limit)
+        public virtual async Task<IList<T>> GetPageAsync(uint page, uint limit)
         {
             return await dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToListAsync();
         }
 
-        public T GetOne(K key)
+        public virtual T GetOne(K key)
         {
             var entity = dbSet.Find(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
             return entity;
         }
 
-        public async Task<T> GetOneAsync(K key)
+        public virtual async Task<T> GetOneAsync(K key)
         {
             var entity = await dbSet.FindAsync(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
             return entity;
         }
 
-        public T Create(T entity)
+        public virtual T Create(T entity)
         {
             if (entity == null)
             {
@@ -68,7 +68,7 @@ namespace Tribufu.Database.Repositories
             return entity;
         }
 
-        public async Task<T> CreateAsync(T entity)
+        public virtual async Task<T> CreateAsync(T entity)
         {
             if (entity == null)
             {
@@ -86,7 +86,7 @@ namespace Tribufu.Database.Repositories
             return entity;
         }
 
-        public T Update(T entity)
+        public virtual T Update(T entity)
         {
             if (entity == null)
             {
@@ -98,7 +98,7 @@ namespace Tribufu.Database.Repositories
             return entity;
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             if (entity == null)
             {
@@ -110,25 +110,25 @@ namespace Tribufu.Database.Repositories
             return entity;
         }
 
-        public void Delete(K key)
+        public virtual void Delete(K key)
         {
             var entity = dbSet.Find(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
             Delete(entity);
         }
 
-        public async Task DeleteAsync(K key)
+        public virtual async Task DeleteAsync(K key)
         {
             var entity = await dbSet.FindAsync(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
             await DeleteAsync(entity);
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             dbSet.Remove(entity);
             context.SaveChanges();
         }
 
-        public async Task DeleteAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             dbSet.Remove(entity);
             await context.SaveChangesAsync();
