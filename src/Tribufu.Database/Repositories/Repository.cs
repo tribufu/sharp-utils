@@ -10,7 +10,7 @@ namespace Tribufu.Database.Repositories
     {
         protected readonly C context;
 
-        private readonly DbSet<T> dbSet;
+        protected readonly DbSet<T> dbSet;
 
         public Repository(C context)
         {
