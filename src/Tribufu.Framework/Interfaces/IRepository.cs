@@ -8,32 +8,32 @@ namespace Tribufu.Framework.Interfaces
 {
     public interface IRepository<T, K> where T : class
     {
-        public IList<T> GetAll();
+        IList<T> GetAll();
 
-        public Task<IList<T>> GetAllAsync();
+        Task<IList<T>> GetAllAsync();
 
-        public IList<T> GetPage(uint page, uint limit = DatabaseLimits.PAGINATION);
+        IList<T> GetPage(uint page, uint limit);
 
-        public Task<IList<T>> GetPageAsync(uint page, uint limit = DatabaseLimits.PAGINATION);
+        Task<IList<T>> GetPageAsync(uint page, uint limit);
 
-        public T GetOne(K key);
+        T GetOne(K key);
 
-        public Task<T> GetOneAsync(K key);
+        Task<T> GetOneAsync(K key);
 
-        public T Create(T entity);
+        T Create(T entity);
 
-        public Task<T> CreateAsync(T entity);
+        Task<T> CreateAsync(T entity);
 
-        public T Update(T entity);
+        T Update(T entity);
 
-        public Task<T> UpdateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
 
-        public void Delete(K id);
+        void Delete(K key);
 
-        public Task DeleteAsync(K id);
+        Task DeleteAsync(K key);
 
-        public void Delete(T entity);
+        void Delete(T entity);
 
-        public Task DeleteAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }
