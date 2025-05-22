@@ -20,7 +20,7 @@ namespace Tribufu.Database.Repositories
 
         public virtual IList<T> GetAll()
         {
-            return dbSet.ToList();
+            return [.. dbSet];
         }
 
         public virtual async Task<IList<T>> GetAllAsync()
@@ -38,88 +38,61 @@ namespace Tribufu.Database.Repositories
             return await dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToListAsync();
         }
 
-        public virtual T GetOne(K key)
+        public virtual T? GetOne(K key)
         {
-            var entity = dbSet.Find(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
-            return entity;
+            return dbSet.Find(key);
         }
 
-        public virtual async Task<T> GetOneAsync(K key)
+        public virtual async Task<T?> GetOneAsync(K key)
         {
-            var entity = await dbSet.FindAsync(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
-            return entity;
+            return await dbSet.FindAsync(key);
         }
 
-        public virtual T Create(T entity)
+        public virtual T? Create(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
-            }
-
             dbSet.Add(entity);
 
             var result = context.SaveChanges();
-            if (result == 0)
-            {
-                throw new DbUpdateException("Entity creation failed. No changes were saved.");
-            }
-
-            return entity;
+            return result > 0 ? entity : null;
         }
 
-        public virtual async Task<T> CreateAsync(T entity)
+        public virtual async Task<T?> CreateAsync(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
-            }
-
             await dbSet.AddAsync(entity);
-
             var result = await context.SaveChangesAsync();
-            if (result == 0)
-            {
-                throw new DbUpdateException("Entity creation failed. No changes were saved.");
-            }
-
-            return entity;
+            return result > 0 ? entity : null;
         }
 
-        public virtual T Update(T entity)
+        public virtual T? Update(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
-            }
-
             dbSet.Update(entity);
-            context.SaveChanges();
-            return entity;
+            var result = context.SaveChanges();
+            return result > 0 ? entity : null;
         }
 
-        public virtual async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T?> UpdateAsync(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
-            }
-
             dbSet.Update(entity);
-            await context.SaveChangesAsync();
-            return entity;
+            var result = await context.SaveChangesAsync();
+            return result > 0 ? entity : null;
         }
 
         public virtual void Delete(K key)
         {
-            var entity = dbSet.Find(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
-            Delete(entity);
+            var entity = dbSet.Find(key);
+            if (entity != null)
+            {
+                Delete(entity);
+            }
         }
 
         public virtual async Task DeleteAsync(K key)
         {
-            var entity = await dbSet.FindAsync(key) ?? throw new KeyNotFoundException($"Entity with key {key} was not found.");
-            await DeleteAsync(entity);
+            var entity = await dbSet.FindAsync(key);
+            if (entity != null)
+            {
+                await DeleteAsync(entity);
+            }
         }
 
         public virtual void Delete(T entity)

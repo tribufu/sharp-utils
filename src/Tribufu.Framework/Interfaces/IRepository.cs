@@ -16,17 +16,17 @@ namespace Tribufu.Framework.Interfaces
 
         Task<IList<T>> GetPageAsync(uint page, uint limit);
 
-        T GetOne(K key);
+        T? GetOne(K key);
 
-        Task<T> GetOneAsync(K key);
+        Task<T?> GetOneAsync(K key);
 
-        T Create(T entity);
+        T? Create(T entity);
 
-        Task<T> CreateAsync(T entity);
+        Task<T?> CreateAsync(T entity);
 
-        T Update(T entity);
+        T? Update(T entity);
 
-        Task<T> UpdateAsync(T entity);
+        Task<T?> UpdateAsync(T entity);
 
         void Delete(K key);
 
