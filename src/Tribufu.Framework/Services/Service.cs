@@ -10,81 +10,81 @@ namespace Tribufu.Framework.Services
 {
     public class Service<T, K> : IService<T, K> where T : class
     {
-        protected readonly IRepository<T, K> repository;
+        protected readonly IRepository<T, K> _repository;
 
         public Service(IRepository<T, K> repository)
         {
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public virtual IList<T> GetAll()
         {
-            return repository.GetAll();
+            return _repository.GetAll();
         }
 
         public virtual async Task<IList<T>> GetAllAsync()
         {
-            return await repository.GetAllAsync();
+            return await _repository.GetAllAsync();
         }
 
         public virtual IList<T> GetPage(uint page, uint limit)
         {
-            return repository.GetPage(page, limit);
+            return _repository.GetPage(page, limit);
         }
 
         public virtual async Task<IList<T>> GetPageAsync(uint page, uint limit)
         {
-            return await repository.GetPageAsync(page, limit);
+            return await _repository.GetPageAsync(page, limit);
         }
 
         public virtual T? GetOne(K id)
         {
-            return repository.GetOne(id);
+            return _repository.GetOne(id);
         }
 
         public virtual async Task<T?> GetOneAsync(K id)
         {
-            return await repository.GetOneAsync(id);
+            return await _repository.GetOneAsync(id);
         }
 
         public virtual T? Create(T entity)
         {
-            return repository.Create(entity);
+            return _repository.Create(entity);
         }
 
         public virtual async Task<T?> CreateAsync(T entity)
         {
-            return await repository.CreateAsync(entity);
+            return await _repository.CreateAsync(entity);
         }
 
         public virtual T? Update(T entity)
         {
-            return repository.Update(entity);
+            return _repository.Update(entity);
         }
 
         public virtual async Task<T?> UpdateAsync(T entity)
         {
-            return await repository.UpdateAsync(entity);
+            return await _repository.UpdateAsync(entity);
         }
 
         public virtual void Delete(K id)
         {
-            repository.Delete(id);
+            _repository.Delete(id);
         }
 
         public virtual async Task DeleteAsync(K id)
         {
-            await repository.DeleteAsync(id);
+            await _repository.DeleteAsync(id);
         }
 
         public virtual void Delete(T entity)
         {
-            repository.Delete(entity);
+            _repository.Delete(entity);
         }
 
         public virtual async Task DeleteAsync(T entity)
         {
-            await repository.DeleteAsync(entity);
+            await _repository.DeleteAsync(entity);
         }
     }
 }

@@ -8,78 +8,78 @@ namespace Tribufu.Database.Repositories
 {
     public class Repository<C, T, K> : IRepository<T, K> where C : DbContext where T : class
     {
-        protected readonly C context;
+        protected readonly C _context;
 
-        protected readonly DbSet<T> dbSet;
+        protected readonly DbSet<T> _dbSet;
 
         public Repository(C context)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.dbSet = context.Set<T>();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _dbSet = context.Set<T>();
         }
 
         public virtual IList<T> GetAll()
         {
-            return [.. dbSet];
+            return [.. _dbSet];
         }
 
         public virtual async Task<IList<T>> GetAllAsync()
         {
-            return await dbSet.ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public virtual IList<T> GetPage(uint page, uint limit)
         {
-            return dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToList();
+            return _dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToList();
         }
 
         public virtual async Task<IList<T>> GetPageAsync(uint page, uint limit)
         {
-            return await dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToListAsync();
+            return await _dbSet.Skip((int)((page < 1 ? 0 : page - 1) * limit)).Take((int)limit).ToListAsync();
         }
 
         public virtual T? GetOne(K key)
         {
-            return dbSet.Find(key);
+            return _dbSet.Find(key);
         }
 
         public virtual async Task<T?> GetOneAsync(K key)
         {
-            return await dbSet.FindAsync(key);
+            return await _dbSet.FindAsync(key);
         }
 
         public virtual T? Create(T entity)
         {
-            dbSet.Add(entity);
+            _dbSet.Add(entity);
 
-            var result = context.SaveChanges();
+            var result = _context.SaveChanges();
             return result > 0 ? entity : null;
         }
 
         public virtual async Task<T?> CreateAsync(T entity)
         {
-            await dbSet.AddAsync(entity);
-            var result = await context.SaveChangesAsync();
+            await _dbSet.AddAsync(entity);
+            var result = await _context.SaveChangesAsync();
             return result > 0 ? entity : null;
         }
 
         public virtual T? Update(T entity)
         {
-            dbSet.Update(entity);
-            var result = context.SaveChanges();
+            _dbSet.Update(entity);
+            var result = _context.SaveChanges();
             return result > 0 ? entity : null;
         }
 
         public virtual async Task<T?> UpdateAsync(T entity)
         {
-            dbSet.Update(entity);
-            var result = await context.SaveChangesAsync();
+            _dbSet.Update(entity);
+            var result = await _context.SaveChangesAsync();
             return result > 0 ? entity : null;
         }
 
         public virtual void Delete(K key)
         {
-            var entity = dbSet.Find(key);
+            var entity = _dbSet.Find(key);
             if (entity != null)
             {
                 Delete(entity);
@@ -88,7 +88,7 @@ namespace Tribufu.Database.Repositories
 
         public virtual async Task DeleteAsync(K key)
         {
-            var entity = await dbSet.FindAsync(key);
+            var entity = await _dbSet.FindAsync(key);
             if (entity != null)
             {
                 await DeleteAsync(entity);
@@ -97,14 +97,14 @@ namespace Tribufu.Database.Repositories
 
         public virtual void Delete(T entity)
         {
-            dbSet.Remove(entity);
-            context.SaveChanges();
+            _dbSet.Remove(entity);
+            _context.SaveChanges();
         }
 
         public virtual async Task DeleteAsync(T entity)
         {
-            dbSet.Remove(entity);
-            await context.SaveChangesAsync();
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
