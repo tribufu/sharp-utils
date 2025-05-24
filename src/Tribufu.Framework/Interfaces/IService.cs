@@ -16,17 +16,17 @@ namespace Tribufu.Framework.Interfaces
 
         public Task<IList<T>> GetPageAsync(uint page, uint limit = DatabaseLimits.PAGINATION);
 
-        public T GetOne(K id);
+        public T? GetOne(K id);
 
-        public Task<T> GetOneAsync(K id);
+        public Task<T?> GetOneAsync(K id);
 
-        public T Create(T entity);
+        public T? Create(T entity);
 
-        public Task<T> CreateAsync(T entity);
+        public Task<T?> CreateAsync(T entity);
 
-        public T Update(T entity);
+        public T? Update(T entity);
 
-        public Task<T> UpdateAsync(T entity);
+        public Task<T?> UpdateAsync(T entity);
 
         public void Delete(K id);
 
