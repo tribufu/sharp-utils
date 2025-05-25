@@ -1,8 +1,9 @@
 // Copyright (c) Tribufu. All Rights Reserved.
 // SPDX-License-Identifier: MIT
 
-using System;
 using Newtonsoft.Json;
+using System;
+using System.Globalization;
 
 namespace Tribufu.Serialization
 {
@@ -34,7 +35,7 @@ namespace Tribufu.Serialization
         {
             if (value.HasValue)
             {
-                writer.WriteValue(value.Value.ToString());
+                writer.WriteValue(value.Value.ToString(CultureInfo.InvariantCulture));
             }
             else
             {
