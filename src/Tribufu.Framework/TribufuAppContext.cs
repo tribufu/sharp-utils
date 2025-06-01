@@ -14,22 +14,6 @@ namespace Tribufu.Framework
     public static class TribufuAppContext
     {
         /// <summary>
-        /// Checks if the application is running in a development environment.
-        /// This is determined by checking the presence of debug assertions.
-        /// </summary>
-        /// <returns> True if running in a development environment; otherwise, false.</returns>
-        private static bool HasDebugAssertions()
-        {
-#if DEBUG
-            return true;
-#else
-            // Extra heuristics if needed (expand here if running outside DEBUG context)
-            //return Debugger.IsAttached || Environment.GetEnvironmentVariable("DEBUG") == "true";
-            return false;
-#endif
-        }
-
-        /// <summary>
         /// Gets the root base directory of the application.
         /// </summary>
         /// <remarks>
@@ -45,7 +29,7 @@ namespace Tribufu.Framework
                 string baseDirectory;
                 string defaultBaseDirectory = AppContext.BaseDirectory;
 
-                bool isDevelopment = HasDebugAssertions() || defaultBaseDirectory.ToLowerInvariant().Contains("debug");
+                bool isDevelopment = defaultBaseDirectory.ToLowerInvariant().Contains("debug");
 
                 if (isDevelopment)
                 {
